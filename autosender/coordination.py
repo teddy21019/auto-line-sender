@@ -1,7 +1,7 @@
 line_coordinate = {
-    'search'    : (203, 415),
-    'type'      : (532, 928),
-    'send'      : (1203, 935),
+    'search'    : (160, 125),
+    'type'      : (1000, 860),
+    'first_result':(500, 230)
 }
 
 skype_coordinate = {

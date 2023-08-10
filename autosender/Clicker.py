@@ -1,12 +1,17 @@
 from abc import ABC, abstractmethod, abstractproperty
-from ast import arg
+import pyautogui as pt
+import keyboard
+import pyperclip
+from time import sleep
+pt.FAILSAFE = True
+pt.PAUSE = 1 
 
 Coordinate = tuple[int, int]
 
 class Clicker(ABC):
 
     def __init__(self, *args):
-        return self
+        return
 
     @abstractmethod
     def calibrate(self, coordinate_info: dict[str, Coordinate]):
@@ -21,35 +26,65 @@ class Clicker(ABC):
         ...
 
     @abstractmethod
-    def type(self, type_content: str):
+    def type(self, type_content: str, at_all:bool = False):
         ...
 
     @abstractmethod
     def send(self):
         ...
+
+    @abstractmethod
+    def check(self):
+        ...
+
 
 class LineClicker(Clicker):
-    pass
 
-    @abstractmethod
     def calibrate(self, coordinate_info: dict[str, Coordinate]):
         """ Allows you to calibrate the position of crucial components on the screen"""
-        ...
-    @abstractproperty
+        try:
+            self.search_box_pos = coordinate_info['search']
+            self.first_result_pos = coordinate_info['first_result']
+            self.type_box_pos = coordinate_info['type']
+        except:
+            raise KeyError(f"Current coordinate info does not match. Must include: {self.required_coordinate}")
+
+    @property
     def required_coordinate(self):
-        ...
+        return ["search", "first_result", "type"]
 
-    @abstractmethod
     def search(self, search_content: str):
-        ...
+        #click search box
+        pt.click(*self.search_box_pos)  # star: decompose tuple into separate parameters
+        delete_texts()
+        type_in(search_content)
+        sleep(1)
+        pt.click(*self.first_result_pos)
 
-    @abstractmethod
-    def type(self, type_content: str):
-        ...
+    def type(self, type_content: str, at_all: bool = False):
+        pt.click(*self.type_box_pos)
+        if at_all:
+            type_in("@")
+            pt.press('enter')
+        type_in(type_content)
 
-    @abstractmethod
     def send(self):
-        ...
+        while True:
+            if keyboard.is_pressed('enter'):
+                break
+
+    def check(self):
+        series_of_positions = [
+            self.search_box_pos,
+            self.first_result_pos,
+            self.type_box_pos
+        ]
+
+        for position in series_of_positions:
+            pt.moveTo(*position)
+            pt.press("ctrl")
+            sleep(1)    
+        return
 
 class SkypeClicker(Clicker):
     pass
@@ -128,6 +163,8 @@ class TestClicker(Clicker):
     def send(self):
         print(f"Click send button at {self.send_box_pos}")
 
+    def check(self):
+        return
 
 class ClickerFactory:
 
@@ -156,3 +193,16 @@ class ClickerFactory:
         else:
             raise ValueError("Unknown type of messenger!!")
         return c
+    
+
+def type_in(content: str):
+    pyperclip.copy(content)
+    pt.hotkey("ctrl", "v")
+    return
+
+def delete_texts():
+    pt.hotkey("ctrl", "a")
+    pt.press("delete")
+    
+def wait_for_start():
+    keyboard.wait("f12")
