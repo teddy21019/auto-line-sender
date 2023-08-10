@@ -13,7 +13,7 @@ class Seller:
         message = self.generate_message()
 
         self.clicker.search(self.group_name)
-        self.clicker.type(message)
+        self.clicker.type(message, at_all=True)
 
         ## wait for confirm
 

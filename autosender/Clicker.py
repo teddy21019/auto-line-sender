@@ -71,7 +71,7 @@ class LineClicker(Clicker):
         pt.click(*self.type_box_pos)
         if at_all:
             type_in("@")
-            pt.press('enter')
+            pt.press('tab')
         type_in(type_content)
 
     def send(self):
