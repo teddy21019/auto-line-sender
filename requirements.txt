@@ -1,2 +1,4 @@
 pyautogui
 pandas
+keyboard
+pyperclip
