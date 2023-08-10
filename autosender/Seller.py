@@ -1,4 +1,5 @@
 from .Clicker import Clicker
+import pandas as pd
 
 class Seller:
 
@@ -20,3 +21,15 @@ class Seller:
 
     def generate_message(self):
         return f"親愛的賣家您好，以下是連結：{self.url} 。請協助填寫，謝謝！"
+
+
+def df_to_sellers(df:pd.DataFrame, clicker: Clicker, Seller_Class: type(Seller) = Seller):
+    sellers_list = []
+    for index, row in df.iterrows():
+        _id = row['shopid']
+        group_name = row['group_name']
+        url = row['new_sheet']
+        sellers_list.append(
+            Seller_Class(_id, group_name, url, clicker)
+        )
+    return sellers_list

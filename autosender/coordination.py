@@ -5,9 +5,9 @@ line_coordinate = {
 }
 
 skype_coordinate = {
-    'search'    : (336, 735),
-    'type'      : (935, 839),
-    'send'      : (1938, 836),
+    'search'    : (100, 150),
+    'type'      : (700, 935),
+    'first_result': (200, 450)
 }
 
 shopee_coordinate = {
