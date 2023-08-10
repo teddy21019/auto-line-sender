@@ -3,6 +3,8 @@ import pyautogui as pt
 import keyboard
 import pyperclip
 from time import sleep
+from typing import Self
+
 pt.FAILSAFE = True
 pt.PAUSE = 1 
 
@@ -14,7 +16,7 @@ class Clicker(ABC):
         return
 
     @abstractmethod
-    def calibrate(self, coordinate_info: dict[str, Coordinate]):
+    def calibrate(self, coordinate_info: dict[str, Coordinate]) -> Self:
         """ Allows you to calibrate the position of crucial components on the screen"""
         ...
     @abstractproperty
@@ -40,7 +42,10 @@ class Clicker(ABC):
 
 class LineClicker(Clicker):
 
-    def calibrate(self, coordinate_info: dict[str, Coordinate]):
+    def __init__(self, *args):
+        return
+
+    def calibrate(self, coordinate_info: dict[str, Coordinate]) -> Self:
         """ Allows you to calibrate the position of crucial components on the screen"""
         try:
             self.search_box_pos = coordinate_info['search']
@@ -48,7 +53,8 @@ class LineClicker(Clicker):
             self.type_box_pos = coordinate_info['type']
         except:
             raise KeyError(f"Current coordinate info does not match. Must include: {self.required_coordinate}")
-
+        finally:
+            return self
     @property
     def required_coordinate(self):
         return ["search", "first_result", "type"]
@@ -87,27 +93,57 @@ class LineClicker(Clicker):
         return
 
 class SkypeClicker(Clicker):
-    pass
 
-    @abstractmethod
-    def calibrate(self, coordinate_info: dict[str, Coordinate]):
+    def __init__(self, *args):
+        return
+
+    def calibrate(self, coordinate_info: dict[str, Coordinate]) -> Self:
         """ Allows you to calibrate the position of crucial components on the screen"""
-        ...
-    @abstractproperty
+        try:
+            self.search_box_pos = coordinate_info['search']
+            self.first_result_pos = coordinate_info['first_result']
+            self.type_box_pos = coordinate_info['type']
+        except:
+            raise KeyError(f"Current coordinate info does not match. Must include: {self.required_coordinate}")
+        finally:
+            return self
+    @property
     def required_coordinate(self):
-        ...
+        return ["search", "first_result", "type"]
 
-    @abstractmethod
     def search(self, search_content: str):
-        ...
+        #click search box
+        pt.click(*self.search_box_pos)  # star: decompose tuple into separate parameters
+        delete_texts()
+        type_in(search_content)
+        sleep(1)
+        pt.click(*self.first_result_pos)
 
-    @abstractmethod
-    def type(self, type_content: str):
-        ...
+    def type(self, type_content: str, at_all: bool = False):
+        pt.click(*self.type_box_pos)
+        if at_all:
+            type_in("@")
+            pt.press('tab')
+        type_in(type_content)
 
-    @abstractmethod
     def send(self):
-        ...
+        while True:
+            if keyboard.is_pressed('enter'):
+                break
+
+    def check(self):
+        series_of_positions = [
+            self.search_box_pos,
+            self.first_result_pos,
+            self.type_box_pos
+        ]
+
+        for position in series_of_positions:
+            pt.moveTo(*position)
+            pt.press("ctrl")
+            sleep(1)    
+        return
+
 
 class ShopeeClicker(Clicker):
     pass
@@ -137,7 +173,7 @@ class TestClicker(Clicker):
     def required_coordinate(self):
         return ["search", "type", "send"]
 
-    def calibrate(self, coordinate_info: dict[str, Coordinate]):
+    def calibrate(self, coordinate_info: dict[str, Coordinate]) -> Self:
 
         try:
             self.search_box_pos = coordinate_info['search']
@@ -149,6 +185,7 @@ class TestClicker(Clicker):
         print(f"Search box is set at {self.search_box_pos}")
         print(f"Type box is set at {self.type_box_pos}")
         print(f"Send button is set at {self.send_box_pos}")
+        return self
 
     def search(self, search_content: str):
         print(f"Click the search box at {self.search_box_pos}")
