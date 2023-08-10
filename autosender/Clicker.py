@@ -192,9 +192,10 @@ class TestClicker(Clicker):
         print(f"Type in '{search_content}'")
         print(f"Click the first result")
 
-    def type(self, type_content: str):
+    def type(self, type_content: str, at_all:bool):
         print(f"Click the typing area at {self.type_box_pos}")
-        print("Type: @"); print("press enter")
+        if at_all:
+            print("Type: @"); print("press tab")
         print(f"Type {type_content}")
 
     def send(self):
