@@ -31,11 +31,67 @@ class Clicker(ABC):
 class LineClicker(Clicker):
     pass
 
+    @abstractmethod
+    def calibrate(self, coordinate_info: dict[str, Coordinate]):
+        """ Allows you to calibrate the position of crucial components on the screen"""
+        ...
+    @abstractproperty
+    def required_coordinate(self):
+        ...
+
+    @abstractmethod
+    def search(self, search_content: str):
+        ...
+
+    @abstractmethod
+    def type(self, type_content: str):
+        ...
+
+    @abstractmethod
+    def send(self):
+        ...
+
 class SkypeClicker(Clicker):
     pass
 
+    @abstractmethod
+    def calibrate(self, coordinate_info: dict[str, Coordinate]):
+        """ Allows you to calibrate the position of crucial components on the screen"""
+        ...
+    @abstractproperty
+    def required_coordinate(self):
+        ...
+
+    @abstractmethod
+    def search(self, search_content: str):
+        ...
+
+    @abstractmethod
+    def type(self, type_content: str):
+        ...
+
+    @abstractmethod
+    def send(self):
+        ...
+
 class ShopeeClicker(Clicker):
     pass
+
+    def calibrate(self, coordinate_info: dict[str, Coordinate]):
+        """ Allows you to calibrate the position of crucial components on the screen"""
+        ...
+    @property
+    def required_coordinate(self):
+        return ""
+
+    def search(self, search_content: str):
+        return
+
+    def type(self, type_content: str):
+        return
+
+    def send(self):
+        return
 
 class TestClicker(Clicker):
 
@@ -62,9 +118,11 @@ class TestClicker(Clicker):
     def search(self, search_content: str):
         print(f"Click the search box at {self.search_box_pos}")
         print(f"Type in '{search_content}'")
+        print(f"Click the first result")
 
     def type(self, type_content: str):
         print(f"Click the typing area at {self.type_box_pos}")
+        print("Type: @"); print("press enter")
         print(f"Type {type_content}")
 
     def send(self):
