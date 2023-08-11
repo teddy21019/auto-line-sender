@@ -63,6 +63,7 @@ class LineClicker(Clicker):
         #click search box
         pt.click(*self.search_box_pos)  # star: decompose tuple into separate parameters
         delete_texts()
+        print(search_content)
         type_in(search_content)
         sleep(1)
         pt.click(*self.first_result_pos)
