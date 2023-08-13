@@ -1,5 +1,6 @@
 from .Clicker import Clicker
 import pandas as pd
+from .MessageTemplate import message_templates
 
 class Seller:
 
@@ -7,10 +8,11 @@ class Seller:
         self.id = id
         self.group_name = group_name
         self.url = url
+        self.next_month = None #
         self.clicker = clicker
 
-    def act(self):
-        message = self.generate_message()
+    def act(self, message_type = 'default'):
+        message = self.generate_message(message_type)
 
         self.clicker.search(self.group_name)
         self.clicker.type(message, at_all=True)
@@ -19,8 +21,9 @@ class Seller:
 
         self.clicker.send()
 
-    def generate_message(self):
-        return f"親愛的賣家您好，以下是連結：{self.url} 。請協助填寫，謝謝！"
+    def generate_message(self, message_type = 'default'):
+        template = message_templates.get_template(message_type) or message_templates.get_template('default')
+        return template.safe_substitute(group_name=self.group_name, url=self.url, id = self.id)
 
 
 def df_to_sellers(df:pd.DataFrame, clicker: Clicker, Seller_Class: type(Seller) = Seller):
