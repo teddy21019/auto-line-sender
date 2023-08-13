@@ -1,0 +1,32 @@
+# messages.yaml
+
+# sellers have fields
+#   - id
+#   - group_name
+#   - url
+# put the field names between ${}
+
+# > will not preserve new line (enter)
+# | will preserve new line
+
+default: |
+  【${next_month}月表單】
+  親愛的賣家您好，以下是連結：${url}
+  請於${last_day_of_this_month}前協助填寫，謝謝！
+
+event: >
+  Other message to ${group_name}, ${month}
+
+event_818: |
+  ✨馬來西亞 8.18 + 8.25 + 9.9 大促折扣券開放報名囉✨
+  只要開立指定折扣券，即有機會於曝光在蝦券頁!!
+
+  ⭐提報指定案型如下：
+  8.18 + 8.25 >> 3折券(70% off)，低消 RM1，折扣上限 RM8 (約台幣$59)
+  9.9 >> 1折券 (90% off)，低消 RM1，折扣上限 RM8 (約台幣$59)
+
+  ⭐單日大促總預算至多只要台幣$4,720，有實際使用張數才有算花費的唷
+
+  ✅曝光日期:  8/18 + 8/25-26 + 9/9  (共 4 天)
+  ✅提供張數: 一天 80 張
+  ✅報名截止日: 8/17 + 8/24 + 9/8 12:00 前
