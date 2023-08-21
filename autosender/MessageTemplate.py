@@ -33,7 +33,7 @@ class MessageTemplates:
             year = current_date.year,
             month = current_date.month,
             next_month = next_month,
-            last_day_of_this_month = last_day_of_this_month.strftime("%-m/%-d")
+            last_day_of_this_month = last_day_of_this_month.strftime("%#m/%#d")
             )
 
 def find_unfilled_fields(template):
