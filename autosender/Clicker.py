@@ -190,7 +190,8 @@ class Clicker_with_image(Clicker):
             self.first_result_pos   = coordinate_info['first_result']
             self.type_box_pos       = coordinate_info['type']
             self.add_file           = coordinate_info['add_file']
-            self.file               = coordinate_info['file']
+            self.file_1               = coordinate_info['file_1']
+            # self.file_2               = coordinate_info['file_2']
             self.open_file          = coordinate_info['open_file']
         except:
             raise KeyError(f"Current coordinate info does not match. Must include: {self.required_coordinate}")
@@ -198,7 +199,7 @@ class Clicker_with_image(Clicker):
             return self
     @property
     def required_coordinate(self):
-        return ["search", "first_result", "type", "add_file", "file", "open_file"]
+        return ["search", "first_result", "type", "add_file", "file_1", "file_2", "open_file"]
 
     def search(self, search_content: str):
         #click search box
@@ -225,8 +226,13 @@ class Clicker_with_image(Clicker):
 
     def send_file(self):
         pt.click(*self.add_file)
-        pt.click(*self.file)
+        pt.click(*self.file_1)
         pt.click(*self.open_file)
+        # sleep(1)
+        # pt.click(*self.add_file)
+        # # pt.click(*self.file_2)
+        # pt.click(*self.open_file)
+        
 
     def send(self):
         while True:
@@ -239,7 +245,8 @@ class Clicker_with_image(Clicker):
             self.first_result_pos,
             self.type_box_pos,
             self.add_file,
-            self.file,
+            self.file_1,
+            self.file_2,
             self.open_file
         ]
 
@@ -405,6 +412,70 @@ class Clicker_disable_voucher(Clicker):
             sleep(1)    
         return    
 
+class AnnieClicker(Clicker):
+
+    def __init__(self, *args):
+        return
+
+    def calibrate(self, coordinate_info: dict[str, Coordinate]) -> Self:
+        """ Allows you to calibrate the position of crucial components on the screen"""
+        try:
+            self.search_box_pos = coordinate_info['search']
+            self.first_result_pos = coordinate_info['first_result']
+            self.type_box_pos = coordinate_info['type']
+        except:
+            raise KeyError(f"Current coordinate info does not match. Must include: {self.required_coordinate}")
+        finally:
+            return self
+    @property
+    def required_coordinate(self):
+        return ["search", "first_result", "type"]
+
+    def search(self, search_content: str):
+        #click search box
+        pt.click(*self.search_box_pos)  # star: decompose tuple into separate parameters
+        delete_texts()
+        print(search_content)
+        type_in(search_content)
+        sleep(1)
+        pt.click(*self.first_result_pos)
+
+    def search_message(self):
+        ...
+
+    def type(self, type_content: str):
+        pt.click(*self.type_box_pos)
+        # if at_all:
+        #     type_in("@")
+        #     type_in(PIC_name) # Test
+        #     pt.press('tab')
+        type_in(type_content)
+
+    def disable(self):
+        ...
+
+
+    def send_file(self):
+        ...
+
+    def send(self):
+        while True:
+            if keyboard.is_pressed('enter'):
+                break
+
+    def check(self):
+        series_of_positions = [
+            self.search_box_pos,
+            self.first_result_pos,
+            self.type_box_pos
+        ]
+
+        for position in series_of_positions:
+            pt.moveTo(*position)
+            pt.press("ctrl")
+            sleep(1)    
+        return
+
 class TestClicker(Clicker):
 
     def __init__(self, *args):
@@ -493,4 +564,4 @@ def delete_texts():
     pt.press("delete")
     
 def wait_for_start():
-    keyboard.wait("f12")
+    keyboard.wait("f9")
