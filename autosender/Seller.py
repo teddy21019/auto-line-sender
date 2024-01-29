@@ -111,6 +111,28 @@ class Seller_disable_voucher(Seller):
 
         self.clicker.disable()   
 
+class Annie_Seller(Seller):
+
+    def __init__(self, url:str , username: str, clicker: Clicker):
+        self.username   = username
+        self.url        = url
+        self.next_month = None #
+        self.clicker    = clicker
+
+    def act(self, message_type = 'default'):
+        message = self.generate_message(message_type)
+
+        self.clicker.search(self.username)
+        # self.clicker.type(message, at_all=True)
+        self.clicker.type(message) # Test
+
+        ## wait for confirm
+
+        self.clicker.send()
+
+    def generate_message(self, message_type = 'default'):
+        template = message_templates.get_template(message_type) or message_templates.get_template('default')
+        return template.safe_substitute(username=self.username, url=self.url)
 
 # def df_to_sellers(df:pd.DataFrame, clicker: Clicker, Seller_Class: type(Seller) = Seller):
 def df_to_sellers(df:pd.DataFrame, clicker: Clicker, Seller_Class: type(Seller)):
@@ -132,5 +154,15 @@ def df_to_sellers_voucher(df:pd.DataFrame, clicker: Clicker, Seller_Class: type(
         username = row['tw username']
         sellers_list.append(
             Seller_Class(promo_id, username, clicker)
+        )
+    return sellers_list
+
+def df_to_Annie(df:pd.DataFrame, clicker: Clicker, Seller_Class: type(Seller)):
+    sellers_list = []
+    for index, row in df.iterrows():
+        url = row['賣家通知gsheet']
+        username = row['username']
+        sellers_list.append(
+            Seller_Class(url, username, clicker)
         )
     return sellers_list
