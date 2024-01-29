@@ -15,7 +15,8 @@ picture_coordinate = {
     'type'        : (1000, 860),
     'first_result': (500, 230),
     'add_file'    : (596, 992),
-    'file'        : (400, 260),
+    'file_1'        : (400, 260),
+    # 'file_2'        : (400, 285),
     'open_file'   : (700, 680),
 }
 
@@ -39,6 +40,12 @@ disable_voucher_coordinate = {
     'disable_button'        : (1500, 280),
     'disable_comfirm_button': (1650, 400),
     'return_button'         : (60, 300),
+}
+
+line_Annie_coordinate = {
+    'search'      : (650, 300),
+    'type'        : (1000, 950),
+    'first_result':(500, 570)
 }
 
 test_coordinate = {
